@@ -2,7 +2,7 @@
  * @Author: tsingwong 
  * @Date: 2018-01-16 10:05:31 
  * @Last Modified by: tsingwong
- * @Last Modified time: 2018-01-16 19:56:48
+ * @Last Modified time: 2018-01-17 09:06:45
  */
 let canvas = document.querySelector('#canvas'),
     context = canvas.getContext('2d'),
@@ -133,6 +133,7 @@ canvas.onmousedown = function (e) {
     let x = e.clientX,
         y = e.clientY;
     
+    // 防止浏览器对鼠标事件作出相应
     e.preventDefault();
     rubberbandStart(x, y);
 };
@@ -148,6 +149,7 @@ window.onmousemove = function (e) {
     let x = e.clientX,
         y = e.clientY;
 
+    // 防止浏览器对鼠标事件作出相应
     e.preventDefault();
     if (dragging) {
         rubberbandStretch(x, y);
@@ -159,6 +161,7 @@ window.onmousemove = function (e) {
  * @param {Object} e 鼠标事件
  */
 window.onmouseup = function (e) {
+    // 防止浏览器对鼠标事件作出相应
     e.preventDefault();
     rubberbandEnd();
 };
