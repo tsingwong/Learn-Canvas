@@ -2,7 +2,7 @@
  * @Author: tsingwong 
  * @Date: 2018-01-22 14:24:22 
  * @Last Modified by: tsingwong
- * @Last Modified time: 2018-01-22 17:37:57
+ * @Last Modified time: 2018-01-22 17:55:45
  */
 let canvas = document.querySelector('#canvas'),
     context = canvas.getContext('2d');
@@ -141,6 +141,7 @@ function drawRing() {
     drawRingOuterCircle();
 
     context.strokeStyle = 'rgba(0, 0, 0, .1)';
+    // 这时候采用顺时针绘制，为了绘制圆环，所以这地方故意没有 beginPath() 。
     context.arc(circle.x, circle.y, circle.radius + RING_INNER_RADIUS, 0, Math.PI * 2, false);
     context.fillStyle = 'rgba(100, 140, 230, .1)';
     context.fill();
@@ -157,6 +158,7 @@ function drawRingOuterCircle() {
     context.shadowBlur = 6;
     context.strokeStyle = TRACKING_DIAL_STORK_STYLE;
     context.beginPath();
+    // 这时候采用逆时针绘制
     context.arc(circle.x, circle.y, circle.radius + RING_OUTER_RADIUS, 0, Math.PI * 2, true);
     context.stroke();
 }
