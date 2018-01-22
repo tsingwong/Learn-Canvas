@@ -2,13 +2,14 @@
  * @Author: tsingwong 
  * @Date: 2018-01-21 11:10:53 
  * @Last Modified by: tsingwong
- * @Last Modified time: 2018-01-21 15:16:02
+ * @Last Modified time: 2018-01-22 11:29:21
  */
 let canvas = document.querySelector('#canvas'),
     context = canvas.getContext('2d'),
     eraseAllButton = document.querySelector('#eraseAllButton'),
     strokeStyleSelect = document.querySelector('#strokeStyleSelect'),
     guidewireCheckbox = document.querySelector('#guidewireCheckbox'),
+    drawShape = document.querySelector('#drawShape'),
     drawingSurfaceImageData,
     mousedown = {},
     rubberbandRect = {},
@@ -102,10 +103,32 @@ function updateRubberbandRectangle(loc) {
  * @param {any} loc 
  */
 function drawRubberbandShape(loc) {
-    context.beginPath();
-    context.moveTo(mousedown.x, mousedown.y);
-    context.lineTo(loc.x, loc.y);
-    context.stroke();
+    if (drawShape.value === 'line') {
+        context.beginPath();
+        context.moveTo(mousedown.x, mousedown.y);
+        context.lineTo(loc.x, loc.y);
+        context.stroke();
+    } else if (drawShape.value === 'circle') {
+        let angle, radius;
+
+        
+        if (mousedown.y === loc.y) {
+            // 鼠标按下后水平移动
+            radius = Math.abs(mousedown.x - loc.x);
+        } else {
+            // 鼠标按下后非水平移动
+            angle = Math.atan(rubberbandRect.height / rubberbandRect.width);
+            radius = rubberbandRect.height / Math.sin(angle);
+        }
+        
+        context.beginPath();
+        context.arc(mousedown.x, mousedown.y, radius, 0, Math.PI * 2, true);
+        context.stroke();
+    } else if (drawShape.value === 'roundedRect') {
+        context.beginPath();
+        roundedRect(rubberbandRect.left, rubberbandRect.top, rubberbandRect.width, rubberbandRect.height, 20);
+        context.stroke();
+    }   
 }
 /**
  * 更新直线
@@ -154,6 +177,23 @@ function drawGuidewires(x, y) {
     drawHorizontalLine(y);
     context.restore();
 }
+/**
+ * 绘制圆角矩形
+ * 
+ * @param {Number} cornerX 起点 X 值 
+ * @param {Number} cornerY 起点 Y 值
+ * @param {any} width 宽度
+ * @param {any} height 高度
+ * @param {any} cornerRadius 圆角大小
+ */
+function roundedRect(cornerX, cornerY, width, height, cornerRadius) {
+    context.moveTo(cornerX + cornerRadius, cornerY);
+    context.arcTo(cornerX + width, cornerY, cornerX + width, cornerY + height, cornerRadius);
+    context.arcTo(cornerX + width, cornerY + height, cornerX, cornerY + height, cornerRadius);
+    context.arcTo(cornerX, cornerY + height, cornerX, cornerY, cornerRadius);
+    context.arcTo(cornerX, cornerY, cornerX + cornerRadius, cornerY, cornerRadius);
+}
+
 
 // Canvas event handlers
 
