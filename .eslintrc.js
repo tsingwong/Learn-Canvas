@@ -11,11 +11,12 @@ module.exports = {
     },
     rules: {
         'comma-dangle': ['error', 'only-multiline'],
-        indent: ['error', 4],
+        indent: ['error', 4, {SwitchCase: 1}],
         'linebreak-style': ['error', 'unix'],
         quotes: ['error', 'single'],
         semi: ['error', 'always'],
         'no-unused-vars': ['warn'],
         'no-console': ['error']
-    }
+    },
+    "plugins": [ "html" ]
 }

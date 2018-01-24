@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,35 +24,69 @@
             margin-top: 10px;
             box-shadow: 4px 4px 8px rgba(0, 0, 0, .5);
         }
+
+        .menu p {
+            display: none;
+        }
+
     </style>
 </head>
+
 <body>
-    <canvas id="canvas" width="600" height="400">
+    <canvas id="canvas" width="800" height="600">
         Canvas not supported!
     </canvas>
 
     <div id="controls">
-        shape: <select id="drawShape">
-            <option value="line">line</option>
-            <option value="circle">circle</option>
-            <option value="roundedRect">roundedRect</option>
-        </select>
-        Stroke color: <select id="strokeStyleSelect">
-            <option value="red">red</option>
-            <option value="green">green</option>
-            <option value="blue">blue</option>
-            <option value="orange">orange</option>
-            <option value="cornflowerblue" selected>cornflowerblue</option>
-            <option value="goldenrod">goldenrod</option>
-            <option value="navy">navy</option>
-            <option value="purple">purple</option>
-        </select>
+        <p>
+            shape: <select id="drawShape">
+                <option value="line">line</option>
+                <option value="circle">circle</option>
+                <option value="roundedRect">roundedRect</option>
+                <option value="polygon">Polygon</option>
+            </select> Stroke color: <select id="strokeStyleSelect">
+                <option value="red">red</option>
+                <option value="green" selected>green</option>
+                <option value="blue">blue</option>
+                <option value="orange">orange</option>
+                <option value="cornflowerblue">cornflowerblue</option>
+                <option value="goldenrod">goldenrod</option>
+                <option value="navy">navy</option>
+                <option value="purple">purple</option>
+            </select> Fill color: <select id="fillStyleSelect">
+                        <option value="red">red</option>
+                        <option value="green">green</option>
+                        <option value="blue">blue</option>
+                        <option value="orange">orange</option>
+                        <option value="cornflowerblue" selected>cornflowerblue</option>
+                        <option value="goldenrod">goldenrod</option>
+                        <option value="navy">navy</option>
+                        <option value="purple">purple</option>
+            </select> Fill: <input type="checkbox" id="fillCheckbox"> Guidewires:
+            <input type="checkbox" id="guidewireCheckbox" checked>
+            <input type="button" id="eraseAllButton" value="Erase all">
+        </p>
+        <div class="menu">
+            <p class="polygon">
+                Silds: <select id="sidesSelect">
+                    <option value="4" selected>4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                </select> Start Angle: <select id="startAngleSelect">
+                    <option value="0" selected>0</option>
+                    <option value="22.5">22.5</option>
+                    <option value="45">45</option>
+                    <option value="67.5">67.5</option>
+                    <option value="90">90</option>
+                </select>
+            </p>
+        </div>
 
-        Guidewires:
-        <input type="checkbox" id="guidewireCheckbox" checked>
-        <input type="button" id="eraseAllButton" value="Erase all">
 
         <script src="./rubberbands.js"></script>
     </div>
 </body>
+
 </html>
