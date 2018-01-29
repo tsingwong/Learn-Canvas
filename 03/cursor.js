@@ -2,12 +2,17 @@
  * @Author: tsingwong 
  * @Date: 2018-01-28 10:10:57 
  * @Last Modified by: tsingwong
- * @Last Modified time: 2018-01-28 17:24:24
+ * @Last Modified time: 2018-01-29 16:08:22
  */
 const canvas = document.querySelector('#canvas'),
-    context = canvas.getContext('2d');
+    context = canvas.getContext('2d'),
 
-let drawingSurfaceImageData;
+    BLINK_ON = 500,
+    BLINK_OFF = 500;
+
+let drawingSurfaceImageData,
+    blinkingInterval,
+    line;
 /**
  * 光标构造函数
  * 
@@ -81,6 +86,79 @@ class TextCursor {
         context.putImageData(imageData, 0 ,0 ,this.left, this.top, this.width, this.getHeight(context));
     }
 }
+/**
+ * 单行字符串
+ * 
+ * @class TextLine
+ */
+class TextLine {
+    constructor(x, y) {
+        this.text = '';
+        this.left = x;
+        this.bottom = y;
+        this.caret = 0;
+    }
+    /**
+     * 插入单个字符
+     * 
+     * @param {String} text 单个字符
+     * @memberof TextLine
+     */
+    insert(text) {
+        this.text = this.text.substr(0, this.caret) + text + this.text.substr(this.caret);
+        this.caret += text.length;
+    }
+    /**
+     * 删除前一个字符
+     * 
+     * @returns 
+     * @memberof TextLine
+     */
+    removeCharacterBeforeCaret() {
+        if (this.caret === 0) {
+            return;
+        }
+        this.text = this.text.substring(0, this.caret - 1) + this.text.substring(this.caret);
+        
+        this.caret--;
+    }
+    /**
+     * 获取宽度
+     * 
+     * @param {Object} context 
+     * @returns 
+     * @memberof TextLine
+     */
+    getWidth(context) {
+        return context.measureText(this.text).width;
+    }
+    /**
+     * 
+     * 
+     * @param {any} context 
+     * @returns 
+     * @memberof TextLine
+     */
+    getHeight(context) {
+        const w = context.measureText('W').width;
+        return w + w / 6;
+    }
+
+    draw(context) {
+        context.save();
+        context.textAlign = 'start';
+        context.textBaseLine = 'bottom';
+
+        context.strokeText(this.text, this.left, this.bottom);
+        context.fillText(this.text, this.left, this.bottom);
+
+        context.restore();
+    }
+
+    erase(context, imageData) {
+        context.putImageData(imageData, 0, 0);
+    }
+}
 
 /**
  * 绘制网格
@@ -124,7 +202,20 @@ function windowToCanvas(x, y) {
     };
 }
 
-const cursor = new TextCursor;
+const cursor = new TextCursor();
+
+function blinkCursor() {
+    clearInterval(blinkingInterval);
+    blinkingInterval = setInterval((e) => {
+        cursor.erase(context, drawingSurfaceImageData);
+
+        setTimeout((e) => {
+            // 由于在 draw 里操作会减去 cursor.getHeight(context)
+            // 所以这里加上
+            cursor.draw(context, cursor.left, cursor.top + cursor.getHeight(context));
+        }, BLINK_OFF);
+    }, BLINK_ON + BLINK_OFF);
+}
 /**
  * 绘制光标
  * 
@@ -132,7 +223,12 @@ const cursor = new TextCursor;
  */
 function moveCursor (loc) {
     cursor.erase(context, drawingSurfaceImageData);
+    saveDrawingSurface();
+    context.putImageData(drawingSurfaceImageData, 0, 0);
+
     cursor.draw(context, loc.x, loc.y);
+
+    blinkCursor(loc);
 }
 /**
  * 保存当前绘图环境
@@ -145,8 +241,52 @@ function saveDrawingSurface () {
 
 canvas.onmousedown = function (e) {
     const loc = windowToCanvas(e.clientX, e.clientY);
+    line = new TextLine(loc.x, loc.y);
     moveCursor(loc);
 };
+
+document.onkeydown = function (e) {
+    if ([8, 13].indexOf(e.keyCode) > -1) {
+        e.preventDefault();
+    }
+    
+    if([8].indexOf(e.keyCode) > -1) {
+        context.save();
+        
+        line.erase(context, drawingSurfaceImageData);
+        line.removeCharacterBeforeCaret();
+
+        moveCursor(line.left + line.getWidth(context), line.bottom);
+
+        line.draw(context);
+
+        context.restore();
+    }
+};
+
+document.onkeypress = function (e) {
+    let key = String.fromCharCode(e.which);
+
+    if ([8].indexOf(e.keyCode) === -1 && !e.ctrlKey && !e.metaKey) {
+        e.preventDefault();
+
+        context.save();
+
+        line.erase(context, drawingSurfaceImageData);
+        line.insert(key);
+
+        moveCursor(line.left + line.getWidth(context), line.bottom);
+
+        context.shadowColor = 'rgba(0, 0, 0, .5)';
+        context.shadowOffsetX = 1;
+        context.shadowOffsetY = 2;
+        context.shadowBlur = 3;
+
+        line.draw(context);
+
+        context.restore();
+    }
+}
 
 // Initialization
 context.font = '64pt Comic-sans';
