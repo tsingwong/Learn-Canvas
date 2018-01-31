@@ -2,7 +2,7 @@
  * @Author: tsingwong 
  * @Date: 2018-01-30 15:06:10 
  * @Last Modified by: tsingwong
- * @Last Modified time: 2018-01-31 11:26:37
+ * @Last Modified time: 2018-01-31 11:28:37
  */
 const canvas = document.querySelector('#canvas'),
     context = canvas.getContext('2d'),
@@ -21,9 +21,10 @@ function drawInColor() {
 });
 
 function handler () {
-    imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-
     drawInColor();
+
+    // 重置后，重新获取 imageData
+    imageData = context.getImageData(0, 0, canvas.width, canvas.height);
     worker.postMessage(
         {
             'value': this.value,
