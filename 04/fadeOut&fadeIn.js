@@ -2,7 +2,7 @@
  * @Author: tsingwong 
  * @Date: 2018-02-02 14:25:11 
  * @Last Modified by: tsingwong
- * @Last Modified time: 2018-02-02 20:27:18
+ * @Last Modified time: 2018-02-03 10:07:20
  */
 const canvas = document.querySelector('#canvas'),
     context = canvas.getContext('2d'),
@@ -25,7 +25,7 @@ function increaseTransparency(imagedata, steps) {
         if (alpha > 0) {
             currentAlpha = imagedata.data[i];
             step = Math.ceil(alpha / steps);
-            
+
             if (currentAlpha + step <= alpha) {
                 imagedata.data[i] += step;
             } else {
@@ -39,14 +39,14 @@ function reduceTransparency(imagedata, steps) {
     let alpha, currentAlpha, step, length = imagedata.data.length;
 
     for (let i = 3; i < length; i += 4) {
-        alpha  = 0;
+        alpha = imagedataOffScreen.data[i];
 
         if (alpha > 0 && imagedata.data[i] > 0) {
             currentAlpha = imagedata.data[i];
             step = Math.ceil(alpha / steps);
 
             if (currentAlpha - step > 0) {
-                image.data[i] -= step;
+                imagedata.data[i] -= step;
             } else {
                 imagedata.data[i] = 0;
             }
@@ -75,7 +75,7 @@ function fadeIn(context, imagedata, steps, milliseconedsPerStep) {
 }
 
 
-function fadeOut (context, imagedata, steps, milliseconedsPerStep) {
+function fadeOut(context, imagedata, steps, milliseconedsPerStep) {
     let frame = 0;
 
     interval = window.setInterval(() => {
@@ -93,10 +93,10 @@ function fadeOut (context, imagedata, steps, milliseconedsPerStep) {
 
 // Event handler
 fadeInSelect.onclick = function (e) {
-    imagedataOffScreen = offScreenContext.getImageData(0, 0, offScreenCanvas.width, offScreenCanvas.height);    
+    imagedataOffScreen = offScreenContext.getImageData(0, 0,canvas.width, canvas.height);
     fadeIn(
         context,
-        imagedataOffScreen,
+        offScreenContext.getImageData(0, 0,canvas.width, canvas.height),
         50,
         1000 / 60
     );
@@ -106,12 +106,12 @@ fadeOutSelect.onclick = function () {
     fadeOut(
         context,
         context.getImageData(0, 0, canvas.width, canvas.height),
-        50, 
+        50,
         1000 / 60
     );
 };
 
-    
+
 // Initialization
 
 image.src = './Uncle.jpg';
@@ -121,4 +121,3 @@ image.onload = function (e) {
     offScreenCanvas.height = canvas.height;
     offScreenContext.drawImage(image, 0, 0, canvas.width, canvas.height);
 };
-
