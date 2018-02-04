@@ -2,7 +2,7 @@
  * @Author: tsingwong 
  * @Date: 2018-02-04 21:15:45 
  * @Last Modified by: tsingwong
- * @Last Modified time: 2018-02-04 23:38:35
+ * @Last Modified time: 2018-02-04 23:50:57
  */
 const canvas = document.querySelector('#canvas'),
     context = canvas.getContext('2d');
@@ -51,6 +51,8 @@ function drawMagnifier(x, y) {
         magnifierRect.h
     );
 
+    context.save();
+    
     context.beginPath();
 
     context.arc(x, y, 25, 0,  Math.PI / 180 * 360, false);
