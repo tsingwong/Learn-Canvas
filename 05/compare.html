@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        #divSetInterval,
+        #divSetTimeout,
+        #divRAF {
+            background-color: lightblue;
+            width: 0;
+            height: 20px;
+            line-height: 20px;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div id="divSetInterval">0%</div>
+    setInterVal: <button id="btnSetInterval">run</button>
+
+    <hr>
+
+    <div id="divSetTimeout">0%</div>
+    setTimeout: <button id="btnSetTimeout">run</button>
+    
+    <hr>
+
+    <div id="divRAF">0%</div>
+    requestAnimationFrame: <button id="btnRAF">run</button>
+    <script src="./compare.js"></script>
+</body>
+
+</html>
