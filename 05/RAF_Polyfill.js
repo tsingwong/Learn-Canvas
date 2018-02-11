@@ -2,10 +2,12 @@
  * @Author: tsingwong 
  * @Date: 2018-02-10 22:57:50 
  * @Last Modified by: tsingwong
- * @Last Modified time: 2018-02-10 22:59:28
+ * @Last Modified time: 2018-02-11 23:33:41
  */
-if (!Date.now)
+if (!Date.now){
     Date.now = function () { return new Date().getTime(); };
+}
+    
 
 (function () {
     'use strict';
