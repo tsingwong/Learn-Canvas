@@ -2,7 +2,7 @@
  * @Author: tsingwong 
  * @Date: 2018-02-12 22:56:17 
  * @Last Modified by: tsingwong
- * @Last Modified time: 2018-02-12 23:39:36
+ * @Last Modified time: 2018-02-13 15:14:27
  */
 let canvas = document.querySelector('#canvas'),
     context = canvas.getContext('2d'),
@@ -51,7 +51,8 @@ let canvas = document.querySelector('#canvas'),
         },
     ],
     numDiscs = discs.length,
-    animateButton = document.querySelector('#animateButton');
+    animateButton = document.querySelector('#animateButton'),
+    lastTime = 0;
 
 // Function
 
@@ -138,6 +139,18 @@ function draw() {
         context.restore();
     }
 }
+/**
+ * 计算 FPS 值
+ * 
+ * @returns 
+ */
+function calculateFps() {
+    let now = (+ new Date()),
+        fps = 1000 / (now - lastTime);
+    
+    lastTime = now;
+    return fps;
+}
 
 // Animation
 
@@ -147,6 +160,9 @@ function animate() {
         drawBackground();
         update();
         draw();
+
+        context.fillStyle = 'cornflowerblue';
+        context.fillText(calculateFps().toFixed() + ' fps', 20, 60);
 
         window.requestAnimationFrame(animate);
     }
