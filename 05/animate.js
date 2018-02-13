@@ -2,7 +2,7 @@
  * @Author: tsingwong 
  * @Date: 2018-02-12 22:56:17 
  * @Last Modified by: tsingwong
- * @Last Modified time: 2018-02-13 15:14:27
+ * @Last Modified time: 2018-02-13 15:41:33
  */
 let canvas = document.querySelector('#canvas'),
     context = canvas.getContext('2d'),
@@ -52,7 +52,9 @@ let canvas = document.querySelector('#canvas'),
     ],
     numDiscs = discs.length,
     animateButton = document.querySelector('#animateButton'),
-    lastTime = 0;
+    lastTime = 0,
+    lastFpsUpdateTime = 0,
+    lastFpsUpdate = 0;;
 
 // Function
 
@@ -154,15 +156,29 @@ function calculateFps() {
 
 // Animation
 
-function animate() {
+function animate(time) {
+    let fps = 0,
+        now = +new Date();
+        
+    if (time === undefined) {
+        time = + new Date();
+    }
     if (!paused) {
         context.clearRect(0, 0, canvas.width, canvas.height);
         drawBackground();
         update();
         draw();
 
+        fps = calculateFps();
+
+        
+
+        if (now -lastFpsUpdateTime > 1000) {
+            lastFpsUpdateTime = now;
+            lastFpsUpdate = fps;
+        }
         context.fillStyle = 'cornflowerblue';
-        context.fillText(calculateFps().toFixed() + ' fps', 20, 60);
+        context.fillText(lastFpsUpdate.toFixed() + 'fps', 20, 60);
 
         window.requestAnimationFrame(animate);
     }
