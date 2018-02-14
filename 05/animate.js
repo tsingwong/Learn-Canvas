@@ -2,7 +2,7 @@
  * @Author: tsingwong 
  * @Date: 2018-02-12 22:56:17 
  * @Last Modified by: tsingwong
- * @Last Modified time: 2018-02-13 15:41:33
+ * @Last Modified time: 2018-02-14 23:59:13
  */
 let canvas = document.querySelector('#canvas'),
     context = canvas.getContext('2d'),
@@ -163,6 +163,7 @@ function animate(time) {
     if (time === undefined) {
         time = + new Date();
     }
+    
     if (!paused) {
         context.clearRect(0, 0, canvas.width, canvas.height);
         drawBackground();
