@@ -2,7 +2,7 @@
  * @Author: tsingwong 
  * @Date: 2018-02-12 22:56:17 
  * @Last Modified by: tsingwong
- * @Last Modified time: 2018-02-14 23:59:13
+ * @Last Modified time: 2018-02-15 16:53:47
  */
 let canvas = document.querySelector('#canvas'),
     context = canvas.getContext('2d'),
@@ -54,7 +54,7 @@ let canvas = document.querySelector('#canvas'),
     animateButton = document.querySelector('#animateButton'),
     lastTime = 0,
     lastFpsUpdateTime = 0,
-    lastFpsUpdate = 0;;
+    lastFpsUpdate = 0;
 
 // Function
 
