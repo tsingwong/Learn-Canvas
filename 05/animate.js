@@ -2,7 +2,7 @@
  * @Author: tsingwong 
  * @Date: 2018-02-12 22:56:17 
  * @Last Modified by: tsingwong
- * @Last Modified time: 2018-02-15 16:53:47
+ * @Last Modified time: 2018-02-16 17:54:59
  */
 let canvas = document.querySelector('#canvas'),
     context = canvas.getContext('2d'),
@@ -52,6 +52,8 @@ let canvas = document.querySelector('#canvas'),
     ],
     numDiscs = discs.length,
     animateButton = document.querySelector('#animateButton'),
+    timeBasedMotionCheckbox = document.querySelector('#timeBasedMotionCheckbox'),
+    timeBasedMotion = false,
     lastTime = 0,
     lastFpsUpdateTime = 0,
     lastFpsUpdate = 0;
@@ -142,6 +144,39 @@ function draw() {
     }
 }
 /**
+ * 独立于帧速率之外的恒定速度播放
+ * 
+ * @param {any} now 
+ */
+function updateTimeBased(now) {
+    let disc = null,
+        elapsedTime = now - lastTime,
+        deltaX,
+        deltaY;
+        
+    for (let i = 0; i < discs.length; i++) {
+        disc = discs[i];
+        deltaX = disc.velocityX * (elapsedTime / 1000);
+        deltaY = disc.velocityY * (elapsedTime / 1000);
+
+        if (disc.x + deltaX + disc.radius > context.canvas.width
+            || disc.x + deltaX - disc.radius < 0
+        ) {
+            disc.velocityX = -disc.velocityX;
+            deltaX =  - deltaX;
+        }
+
+        if (disc.y + deltaY + disc.radius > context.canvas.height 
+            || disc.y + deltaY - disc.radius < 0) {
+            disc.velocityY= -disc.velocityY;
+            deltaY = -deltaY;
+        }
+   
+        disc.x = disc.x + deltaX;
+        disc.y = disc.y + deltaY;
+    }
+}
+/**
  * 计算 FPS 值
  * 
  * @returns 
@@ -167,7 +202,12 @@ function animate(time) {
     if (!paused) {
         context.clearRect(0, 0, canvas.width, canvas.height);
         drawBackground();
-        update();
+        if (timeBasedMotion) {
+            updateTimeBased(now);
+        }
+        else {
+            update();
+        }
         draw();
 
         fps = calculateFps();
@@ -184,6 +224,22 @@ function animate(time) {
         window.requestAnimationFrame(animate);
     }
 }
+timeBasedMotionCheckbox.addEventListener('click', function (e) {
+    if (timeBasedMotionCheckbox.checked) {
+        timeBasedMotion = true;
+        for (let i=0; i < discs.length; ++i) {
+            discs[i].velocityX *= 50;
+            discs[i].velocityY *= 50;
+        }
+    }
+    else {
+        timeBasedMotion = false;
+        for (let i=0; i < discs.length; ++i) {
+            discs[i].velocityX /= 50;
+            discs[i].velocityY /= 50;
+        }
+    }
+ });
 
 // Event handlers
 
