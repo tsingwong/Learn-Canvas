@@ -2,7 +2,7 @@
  * @Author: tsingwong 
  * @Date: 2018-02-12 22:56:17 
  * @Last Modified by: tsingwong
- * @Last Modified time: 2018-02-16 17:54:59
+ * @Last Modified time: 2018-02-16 18:00:07
  */
 let canvas = document.querySelector('#canvas'),
     context = canvas.getContext('2d'),
@@ -224,7 +224,7 @@ function animate(time) {
         window.requestAnimationFrame(animate);
     }
 }
-timeBasedMotionCheckbox.addEventListener('click', function (e) {
+timeBasedMotionCheckbox.addEventListener('click', function () {
     if (timeBasedMotionCheckbox.checked) {
         timeBasedMotion = true;
         for (let i=0; i < discs.length; ++i) {
@@ -239,7 +239,7 @@ timeBasedMotionCheckbox.addEventListener('click', function (e) {
             discs[i].velocityY /= 50;
         }
     }
- });
+});
 
 // Event handlers
 
